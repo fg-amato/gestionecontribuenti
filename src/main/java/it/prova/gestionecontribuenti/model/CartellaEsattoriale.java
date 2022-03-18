@@ -31,30 +31,30 @@ public class CartellaEsattoriale {
 	private StatoCartellaEsattoriale stato;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contribuente_id", nullable = false)
-	private Contribuente contribuente;
+	@JoinColumn(name = "contribuenti_id", nullable = false)
+	private Contribuente contribuenti;
 
 	public CartellaEsattoriale() {
 		super();
 	}
 
 	public CartellaEsattoriale(String descrizione, Integer importo, StatoCartellaEsattoriale stato,
-			Contribuente contribuente) {
+			Contribuente contribuenti) {
 		super();
 		this.descrizione = descrizione;
 		this.importo = importo;
 		this.stato = stato;
-		this.contribuente = contribuente;
+		this.contribuenti = contribuenti;
 	}
 
 	public CartellaEsattoriale(Long id, String descrizione, Integer importo, StatoCartellaEsattoriale stato,
-			Contribuente contribuente) {
+			Contribuente contribuenti) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.importo = importo;
 		this.stato = stato;
-		this.contribuente = contribuente;
+		this.contribuenti = contribuenti;
 	}
 
 	public Long getId() {
@@ -90,11 +90,11 @@ public class CartellaEsattoriale {
 	}
 
 	public Contribuente getContribuente() {
-		return contribuente;
+		return contribuenti;
 	}
 
-	public void setContribuente(Contribuente contribuente) {
-		this.contribuente = contribuente;
+	public void setContribuente(Contribuente contribuenti) {
+		this.contribuenti = contribuenti;
 	}
 
 }

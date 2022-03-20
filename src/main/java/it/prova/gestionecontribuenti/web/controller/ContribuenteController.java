@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -16,8 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.prova.gestionecontribuenti.dto.ContribuenteConCartelleEsattorialiDTO;
 import it.prova.gestionecontribuenti.dto.ContribuenteDTO;
@@ -118,17 +124,17 @@ public class ContribuenteController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/contribuente";
 	}
-	
+
 	@GetMapping("/edit/{idContribuente}")
 	public String editContribuente(@PathVariable(required = true) Long idContribuente, Model model) {
-		model.addAttribute("edit_contribuente_attr",
-				ContribuenteDTO.buildContribuenteDTOFromModel(contribuenteService.caricaSingoloElemento(idContribuente)));
+		model.addAttribute("edit_contribuente_attr", ContribuenteDTO
+				.buildContribuenteDTOFromModel(contribuenteService.caricaSingoloElemento(idContribuente)));
 		return "contribuente/edit";
 	}
 
 	@PostMapping("/update")
-	public String updateContribuente(@Valid @ModelAttribute("edit_contribuente_attr") ContribuenteDTO contribuenteDTO, BindingResult result,
-			RedirectAttributes redirectAttrs, HttpServletRequest request) {
+	public String updateContribuente(@Valid @ModelAttribute("edit_contribuente_attr") ContribuenteDTO contribuenteDTO,
+			BindingResult result, RedirectAttributes redirectAttrs, HttpServletRequest request) {
 
 		if (result.hasErrors()) {
 			return "contribuente/edit";
@@ -137,5 +143,25 @@ public class ContribuenteController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/contribuente";
+	}
+
+	@GetMapping(value = "/searchContribuentiAjax", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public @ResponseBody String searchContribuente(@RequestParam String term) {
+
+		List<Contribuente> listaContribuenteByTerm = contribuenteService.cercaByCognomeENomeILike(term);
+		return buildJsonResponse(listaContribuenteByTerm);
+	}
+
+	private String buildJsonResponse(List<Contribuente> listaContribuenti) {
+		JsonArray ja = new JsonArray();
+
+		for (Contribuente contribuenteItem : listaContribuenti) {
+			JsonObject jo = new JsonObject();
+			jo.addProperty("value", contribuenteItem.getId());
+			jo.addProperty("label", contribuenteItem.getNome() + " " + contribuenteItem.getCognome());
+			ja.add(jo);
+		}
+
+		return new Gson().toJson(ja);
 	}
 }

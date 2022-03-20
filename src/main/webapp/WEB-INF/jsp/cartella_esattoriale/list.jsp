@@ -55,7 +55,7 @@
 											<td>${cartella_esattorialeItem.stato }</td>
 											<td>
 												<a class="btn  btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/cartella_esattoriale/show/${cartella_esattorialeItem.id }">Visualizza</a>
-												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="laservletpermodificare">Edit</a>
+												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/cartella_esattoriale/edit/${cartella_esattorialeItem.id }">Edit</a>
 												<a class="btn btn-outline-danger btn-sm" href="${pageContext.request.contextPath }/cartella_esattoriale/delete/${cartella_esattorialeItem.id }">Delete</a>
 											</td>
 										</tr>

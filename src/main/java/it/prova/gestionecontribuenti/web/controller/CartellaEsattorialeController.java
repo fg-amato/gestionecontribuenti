@@ -121,4 +121,25 @@ public class CartellaEsattorialeController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/cartella_esattoriale";
 	}
+
+	@GetMapping("/edit/{idCartellaEsattoriale}")
+	public String editRegista(@PathVariable(required = true) Long idCartellaEsattoriale, Model model) {
+		model.addAttribute("edit_cartella_esattoriale_attr",
+				cartellaEsattorialeService.caricaSingoloElementoEager(idCartellaEsattoriale));
+		return "cartella_esattoriale/edit";
+	}
+
+	@PostMapping("/update")
+	public String updateRegista(
+			@Valid @ModelAttribute("edit_regista_attr") CartellaEsattorialeDTO cartellaEsattorialeDTO,
+			BindingResult result, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+
+		if (result.hasErrors()) {
+			return "cartella_esattoriale/edit";
+		}
+		cartellaEsattorialeService.aggiorna(cartellaEsattorialeDTO.buildCartellaEsattorialeModel());
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/cartella_esattoriale";
+	}
 }

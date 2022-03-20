@@ -57,7 +57,7 @@
 				                </thead>
 				                <tbody>
 				                	<c:forEach items="${contribuenti_list_attribute }" var="contribuenteItem">
-										<tr>
+										<tr  class="${contribuenteItem.isInContenzioso()? 'table-danger' :''}">
 											<td>${contribuenteItem.codiceFiscale }</td>
 											<td><fmt:formatDate type = "date" value = "${contribuenteItem.dataDiNascita }" /></td>
 											<td>

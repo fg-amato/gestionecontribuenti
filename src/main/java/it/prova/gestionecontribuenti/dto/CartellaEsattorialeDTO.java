@@ -1,10 +1,14 @@
 package it.prova.gestionecontribuenti.dto;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import it.prova.gestionecontribuenti.model.CartellaEsattoriale;
 import it.prova.gestionecontribuenti.model.StatoCartellaEsattoriale;
 
 public class CartellaEsattorialeDTO {
@@ -87,6 +91,30 @@ public class CartellaEsattorialeDTO {
 
 	public void setContribuente(ContribuenteDTO contribuente) {
 		this.contribuente = contribuente;
+	}
+
+	public CartellaEsattoriale buildCartellaEsattorialeModel() {
+		return new CartellaEsattoriale(this.id, this.descrizione, this.importo, this.stato,
+				this.contribuente.buildContribuenteModel());
+	}
+
+	public static CartellaEsattorialeDTO buildCartellaEsattorialeDTOFromModel(CartellaEsattoriale cartellaModel,
+			boolean includeContribuenti) {
+		CartellaEsattorialeDTO result = new CartellaEsattorialeDTO(cartellaModel.getId(), cartellaModel.getDescrizione(),
+				cartellaModel.getImporto(), cartellaModel.getStato());
+
+		if (includeContribuenti)
+			result.setContribuente(ContribuenteDTO.buildContribuenteDTOFromModel(cartellaModel.getContribuente()));
+
+		return result;
+	}
+	
+
+	public static Set<CartellaEsattorialeDTO> createCartellaEsattorialeDTOSetFromModelSet(
+			Set<CartellaEsattoriale> modelListInput, boolean includeContribuenti) {
+		return modelListInput.stream().map(cartellaEntity -> {
+			return CartellaEsattorialeDTO.buildCartellaEsattorialeDTOFromModel(cartellaEntity, includeContribuenti);
+		}).collect(Collectors.toSet());
 	}
 
 }

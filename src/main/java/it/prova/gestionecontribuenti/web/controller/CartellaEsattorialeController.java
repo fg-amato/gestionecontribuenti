@@ -99,10 +99,26 @@ public class CartellaEsattorialeController {
 		return "redirect:/cartella_esattoriale";
 	}
 
-	
 	@GetMapping("/show/{idCartellaEsattoriale}")
 	public String showFilm(@PathVariable(required = true) Long idCartellaEsattoriale, Model model) {
-		model.addAttribute("show_cartella_esattoriale_attr", cartellaEsattorialeService.caricaSingoloElementoEager(idCartellaEsattoriale));
+		model.addAttribute("show_cartella_esattoriale_attr",
+				cartellaEsattorialeService.caricaSingoloElementoEager(idCartellaEsattoriale));
 		return "cartella_esattoriale/show";
+	}
+
+	@GetMapping("/delete/{idCartellaEsattoriale}")
+	public String deleteFilm(@PathVariable(required = true) Long idCartellaEsattoriale, Model model) {
+		model.addAttribute("delete_cartella_esattoriale_attr",
+				cartellaEsattorialeService.caricaSingoloElementoEager(idCartellaEsattoriale));
+		return "cartella_esattoriale/delete";
+	}
+
+	@PostMapping("/remove")
+	public String removeFilm(@RequestParam(required = true) Long idCartellaEsattoriale,
+			RedirectAttributes redirectAttrs) {
+
+		cartellaEsattorialeService.rimuovi(cartellaEsattorialeService.caricaSingoloElemento(idCartellaEsattoriale));
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/cartella_esattoriale";
 	}
 }

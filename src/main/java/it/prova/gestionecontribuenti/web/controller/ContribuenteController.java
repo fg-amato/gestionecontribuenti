@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.gestionecontribuenti.dto.ContribuenteConCartelleEsattorialiDTO;
 import it.prova.gestionecontribuenti.dto.ContribuenteDTO;
+import it.prova.gestionecontribuenti.execptions.ContribuenteConCartelleEsattorialiException;
+import it.prova.gestionecontribuenti.execptions.ContribuenteNotFoundException;
 import it.prova.gestionecontribuenti.model.Contribuente;
 import it.prova.gestionecontribuenti.service.ContribuenteService;
 
@@ -35,8 +37,8 @@ public class ContribuenteController {
 		ModelAndView mv = new ModelAndView();
 		List<Contribuente> contribuenti = contribuenteService.listAllElements();
 		// trasformiamo in DTO
-		mv.addObject("contribuenti_list_attribute",
-				ContribuenteConCartelleEsattorialiDTO.createContribuenteConCartelleEsattorialiDTOSetFromModelList(contribuenti, false));
+		mv.addObject("contribuenti_list_attribute", ContribuenteConCartelleEsattorialiDTO
+				.createContribuenteConCartelleEsattorialiDTOSetFromModelList(contribuenti, false));
 		mv.setViewName("contribuente/list");
 		return mv;
 	}
@@ -74,15 +76,45 @@ public class ContribuenteController {
 				.findByExampleWithPagination(contribuenteExample.buildContribuenteModel(), pageNo, pageSize, sortBy)
 				.getContent();
 
-		model.addAttribute("contribuenti_list_attribute",
-				ContribuenteConCartelleEsattorialiDTO.createContribuenteConCartelleEsattorialiDTOSetFromModelList(contribuenti, false));
+		model.addAttribute("contribuenti_list_attribute", ContribuenteConCartelleEsattorialiDTO
+				.createContribuenteConCartelleEsattorialiDTOSetFromModelList(contribuenti, false));
 		return "contribuente/list";
 	}
 
 	@GetMapping("/show/{idContribuente}")
 	public String show(@PathVariable(required = true) Long idContribuente, Model model) {
-		model.addAttribute("show_contribuente_attr", ContribuenteConCartelleEsattorialiDTO
-				.buildContribuenteConCartelleEsattorialiDTOFromModel(contribuenteService.caricaSingoloElementoConCartelleEsattoriali(idContribuente)));
+		model.addAttribute("show_contribuente_attr",
+				ContribuenteConCartelleEsattorialiDTO.buildContribuenteConCartelleEsattorialiDTOFromModel(
+						contribuenteService.caricaSingoloElementoConCartelleEsattoriali(idContribuente)));
 		return "contribuente/show";
+	}
+
+	@GetMapping("/delete/{idContribuente}")
+	public String delete(@PathVariable(required = true) Long idContribuente, Model model) {
+		model.addAttribute("delete_contribuente_attr", ContribuenteDTO
+				.buildContribuenteDTOFromModel(contribuenteService.caricaSingoloElemento(idContribuente)));
+		return "contribuente/delete";
+	}
+
+	@PostMapping("/remove")
+	public String remove(@RequestParam(required = true) Long idContribuente, RedirectAttributes redirectAttrs) {
+
+		try {
+			contribuenteService.rimuoviById(idContribuente);
+		} catch (ContribuenteNotFoundException e) {
+			redirectAttrs.addFlashAttribute("errorMessage", "Impossibile trovare il contribuente da rimuovere!");
+			// redirectAttrs.addFlashAttribute("list_satellite_attr",
+			// satelliteService.listAllElements());
+			return "redirect:/contribuente";
+		} catch (ContribuenteConCartelleEsattorialiException e) {
+			redirectAttrs.addFlashAttribute("errorMessage",
+					"Il contribuente che tenti di eliminare ha delle cartelle associate!");
+			// redirectAttrs.addFlashAttribute("list_satellite_attr",
+			// satelliteService.listAllElements());
+			return "redirect:/contribuente";
+		}
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/contribuente";
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,4 +99,10 @@ public class CartellaEsattorialeController {
 		return "redirect:/cartella_esattoriale";
 	}
 
+	
+	@GetMapping("/show/{idCartellaEsattoriale}")
+	public String showFilm(@PathVariable(required = true) Long idCartellaEsattoriale, Model model) {
+		model.addAttribute("show_cartella_esattoriale_attr", cartellaEsattorialeService.caricaSingoloElementoEager(idCartellaEsattoriale));
+		return "cartella_esattoriale/show";
+	}
 }

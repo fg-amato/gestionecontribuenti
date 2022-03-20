@@ -1,10 +1,14 @@
 package it.prova.gestionecontribuenti.dto;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import it.prova.gestionecontribuenti.model.Contribuente;
 
 public class ContribuenteDTO {
 
@@ -23,7 +27,7 @@ public class ContribuenteDTO {
 	@NotNull(message = "{dataDiNascita.notnull}")
 	private Date dataDiNascita;
 
-	@NotNull(message = "{indirizzo.notblank}")
+	@NotBlank(message = "{indirizzo.notblank}")
 	private String indirizzo;
 
 	public ContribuenteDTO() {
@@ -33,25 +37,29 @@ public class ContribuenteDTO {
 		this.id = id;
 	}
 
-	public ContribuenteDTO(Long id, String nome, String cognome, String codiceFiscale, Date dataDiNascita) {
+	public ContribuenteDTO(Long id, String nome, String cognome, String codiceFiscale, Date dataDiNascita,
+			String indirizzo) {
 		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
 		this.dataDiNascita = dataDiNascita;
+		this.indirizzo = indirizzo;
 	}
 
-	public ContribuenteDTO(String nome, String cognome, String codiceFiscale) {
+	public ContribuenteDTO(String nome, String cognome, String codiceFiscale, String indirizzo) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
+		this.indirizzo = indirizzo;
 	}
 
-	public ContribuenteDTO(String nome, String cognome, String codiceFiscale, Date dataDiNascita) {
+	public ContribuenteDTO(String nome, String cognome, String codiceFiscale, Date dataDiNascita, String indirizzo) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
 		this.dataDiNascita = dataDiNascita;
+		this.indirizzo = indirizzo;
 	}
 
 	public Long getId() {
@@ -100,6 +108,23 @@ public class ContribuenteDTO {
 
 	public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
+	}
+
+	public Contribuente buildContribuenteModel() {
+		return new Contribuente(this.id, this.nome, this.cognome, this.dataDiNascita, this.codiceFiscale,
+				this.indirizzo);
+	}
+
+	public static ContribuenteDTO buildContribuenteDTOFromModel(Contribuente contribuenteModel) {
+		return new ContribuenteDTO(contribuenteModel.getId(), contribuenteModel.getNome(),
+				contribuenteModel.getCognome(), contribuenteModel.getCodiceFiscale(),
+				contribuenteModel.getDataDiNascita(), contribuenteModel.getIndirizzo());
+	}
+
+	public static List<ContribuenteDTO> createContribuenteDTOListFromModelList(List<Contribuente> modelListInput) {
+		return modelListInput.stream().map(contribuenteEntity -> {
+			return ContribuenteDTO.buildContribuenteDTOFromModel(contribuenteEntity);
+		}).collect(Collectors.toList());
 	}
 
 }

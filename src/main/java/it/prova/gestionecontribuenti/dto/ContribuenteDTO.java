@@ -21,7 +21,7 @@ public class ContribuenteDTO {
 	private String cognome;
 
 	@NotBlank(message = "{codiceFiscale.notblank}")
-	@Size(min = 16, max = 16, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri")
+	@Size(min = 16, max = 16, message = "Il valore inserito '${validatedValue}' deve essere lungo {min} caratteri")
 	private String codiceFiscale;
 
 	@NotNull(message = "{dataDiNascita.notnull}")

@@ -22,13 +22,13 @@
             <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
             <ul class="dropdown-menu" aria-labelledby="dropdown07">
               <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Home</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/regista/search">Ricerca Registi</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/regista/insert">Inserisci Regista</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/film/search">Ricerca Film</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/film/insert">Inserisci Film</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/contribuente/search">Ricerca Contribuenti</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/contribuente/insert">Inserisci Contribuente</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cartella_esattoriale/search">Ricerca Cartella Esattoriale</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cartella_esattoriale/insert">Inserisci Cartella Esattoriale</a></li>
             </ul> 
           </li>
-          <c:if test="${userInfo.isAdmin() }">
+          <%-- <c:if test="${userInfo.isAdmin() }">
 -	      <li class="nav-item dropdown">
 -	        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
 -	        <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -36,13 +36,13 @@
 -	          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/PrepareInsertUtenteServlet">Inserisci Utente</a>
 -	        </div>
 -	      </li>
--	   </c:if>   
+-	   		</c:if>   --%> 
         </ul>
       </div>
-      <div class="col-md-3 text-end">
+      <%-- <div class="col-md-3 text-end">
         <p class="navbar-text">Utente: ${userInfo.username }(${userInfo.nome } ${userInfo.cognome })
     	 <a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a></p>
-      </div>
+      </div> --%>
     </div>
   </nav>
 

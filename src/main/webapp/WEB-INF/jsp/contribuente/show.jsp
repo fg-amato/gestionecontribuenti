@@ -1,4 +1,5 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
 <html lang="it" class="h-100" >
 	 <head>
@@ -57,21 +58,23 @@
 							  <dd class="col-sm-9"><fmt:formatDate type = "date" value = "${show_contribuente_attr.dataDiNascita}" /></dd>
 					    	</dl>
 					    	
-					    	<p>
-					  			<a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-					    			Info Cartella Esattoriale
-					  			</a>
-							</p>
-							<div class="collapse" id="collapseExample">
-					 		 	<div class="card card-body">
-					  				<dl class="row">
-						  				<dt class="col-sm-3 text-right">Status:</dt>
-						  				<dd class="col-sm-9">${show_contribuente_attr.isInContenzioso()? 'TRUE' : 'FALSE'}</dd>
-					   				</dl>
-					   			</div>
-					   		</div>
-					    
-					    
+					    	<dl class="row">
+							  <dt class="col-sm-3 text-right">Totale importo cartelle:</dt>
+							  <dd class="col-sm-9">${show_contribuente_attr.calcolaTotaleImportoCartelle()}</dd>
+					    	</dl>
+					    	
+					    	<dl class="row">
+							  <dt class="col-sm-3 text-right">Totale concluso e pagato:</dt>
+							  <dd class="col-sm-9">${show_contribuente_attr.calcolaTotaleConclusoEPagato()}</dd>
+					    	</dl>
+					    	
+					    	<c:if test ="${ show_contribuente_attr.isInContenzioso()}">
+					    		<dl class="row">
+							  		<dt class="col-sm-3 text-right text-danger">Totale in contenzioso:</dt>
+							  		<dd class="col-sm-9 text-danger">${show_contribuente_attr.calcolaTotaleInContenzioso()}</dd>
+					    		</dl>
+					    	</c:if>
+					    	
 						
 					    <!-- end card body -->
 					    </div>

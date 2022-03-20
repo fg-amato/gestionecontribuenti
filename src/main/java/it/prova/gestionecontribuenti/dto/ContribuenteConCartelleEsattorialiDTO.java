@@ -150,7 +150,6 @@ public class ContribuenteConCartelleEsattorialiDTO {
 //	}
 
 	// aggiungere metodi:
-	// -verifica cartella in contenzioso
 	// -calcolo importi da complessivi, versati e da versare
 
 	public boolean isInContenzioso() {
@@ -172,5 +171,47 @@ public class ContribuenteConCartelleEsattorialiDTO {
 			return ContribuenteConCartelleEsattorialiDTO
 					.buildContribuenteConCartelleEsattorialiDTOFromModel(contribuenteEntity);
 		}).collect(Collectors.toList());
+	}
+
+	public Integer calcolaTotaleImportoCartelle() {
+		int totale = 0;
+		if (this.getCartelleEsattoriali().isEmpty()) {
+			return totale;
+		}
+		for (CartellaEsattorialeDTO item : this.getCartelleEsattoriali()) {
+			totale += item.getImporto();
+		}
+		
+		return totale;
+	}
+	
+	public Integer calcolaTotaleConclusoEPagato() {
+		int totale = 0;
+		if (this.getCartelleEsattoriali().isEmpty()) {
+			return totale;
+		}
+		for (CartellaEsattorialeDTO item : this.getCartelleEsattoriali()) {
+			
+			if (item.getStato() == StatoCartellaEsattoriale.CONCLUSA) {
+				totale += item.getImporto();
+			}
+		}
+		
+		return totale;
+	}
+	
+	public Integer calcolaTotaleInContenzioso() {
+		int totale = 0;
+		if (this.getCartelleEsattoriali().isEmpty()) {
+			return totale;
+		}
+		for (CartellaEsattorialeDTO item : this.getCartelleEsattoriali()) {
+			
+			if (item.getStato() == StatoCartellaEsattoriale.IN_CONTENZIOSO) {
+				totale += item.getImporto();
+			}
+		}
+		
+		return totale;
 	}
 }
